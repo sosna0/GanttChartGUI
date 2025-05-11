@@ -1,0 +1,39 @@
+﻿<Window x:Class="Project.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project"
+        xmlns:UserControls="clr-namespace:Project.Views.UserControls"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    
+    <Grid>
+        <DockPanel Width="Auto">
+            <StackPanel DockPanel.Dock="Left">
+                <Border BorderBrush="Black" BorderThickness="1.4">
+                    <Label Content="Team" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="29" Width="120"/>
+                </Border>
+            </StackPanel>
+
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Disabled"
+            CanContentScroll="True" DockPanel.Dock="Right">
+                <StackPanel>
+                    
+                    <UserControls:TimeAxis Height="35"/>
+                    <Grid ShowGridLines="True">
+                        
+                        
+                        
+                    </Grid>
+
+                </StackPanel>
+
+            </ScrollViewer>
+
+        </DockPanel>
+
+        
+    </Grid>
+</Window>
