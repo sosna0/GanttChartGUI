@@ -8,6 +8,8 @@ using System.Windows.Documents;
 namespace Project.Models {
     internal static class InputParser {
 
+
+        // to domyślnie będzie wczytywane na wejściu
         public static List<string> input = [
             "pogotownie, pierwsza pomoc, 10:30",
             "policja, zabezpieczanie terenu, 10:35",
