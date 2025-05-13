@@ -6,34 +6,71 @@
         xmlns:local="clr-namespace:Project"
         xmlns:UserControls="clr-namespace:Project.Views.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    
+        Title="MainWindow" Height="450" Width="1200">
     <Grid>
-        <DockPanel Width="Auto">
-            <StackPanel DockPanel.Dock="Left">
-                <Border BorderBrush="Black" BorderThickness="1.4">
-                    <Label Content="Team" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="29" Width="120"/>
-                </Border>
-            </StackPanel>
-
-            <ScrollViewer HorizontalScrollBarVisibility="Auto"
-            VerticalScrollBarVisibility="Disabled"
-            CanContentScroll="True" DockPanel.Dock="Right">
-                <StackPanel>
-                    
-                    <UserControls:TimeAxis Height="35"/>
-                    <Grid ShowGridLines="True">
-                        
-                        
-                        
-                    </Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <!-- Przycisk i błędy -->
+            <RowDefinition Height="60"/>
+            <!-- Oś -->
+            <RowDefinition Height="*"/>
+            <!-- Zawartość -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding ActualWidth, ElementName=MainWindow}"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <!-- Przycisk i błędy -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1.4,1.4,1.4,1.4" Width="120" Height="60" Cursor="Hand">
+                <Button x:Name="FileLoad" Content="Wczytaj z pliku" Click="FileLoad_Click" VerticalAlignment="Stretch" Background="Transparent" BorderThickness="0"/>
+            </Border>
+            <TextBlock Grid.Column="1" x:Name="Errors" TextWrapping="Wrap" Text="Potencjalne błędy pojawią się tutaj" FontSize="12" Height="60" TextAlignment="Center" Foreground="#FFFF3131"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <!-- Oś -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <UserControls:TeamLabel Grid.Column="0" TeamName="Team" Height="60" Width="120"/>
+            <UserControls:TimeAxis x:Name="TimeAxis"  Grid.Column="1" Height="60" Width="Auto"/>
+        </Grid>
+        <!-- Scroll po teamach (pionowy) -->
+        <ScrollViewer x:Name="TeamDataScrollViewer" 
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto"
+            CanContentScroll="True"
+            Height="Auto"
+            Grid.Column="0"
+            Grid.Row="2"
+            >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition x:Name="ContentColumn" Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel x:Name="TeamLabels" Grid.Column="0" Orientation="Vertical">
+                    <!-- Etykiety Teamów -->
+                    <UserControls:TeamLabel TeamName="Team1" Height="70" Width="120"/>
+                    <UserControls:TeamLabel TeamName="Team2" Height="70" Width="120"/>
+                    <UserControls:TeamLabel TeamName="Team3" Height="70" Width="120"/>
+                    <UserControls:TeamLabel TeamName="Team4" Height="70" Width="120"/>
+                    <UserControls:TeamLabel TeamName="Team5" Height="70" Width="120"/>
+                    <UserControls:TeamLabel TeamName="Team6" Height="70" Width="120"/>
                 </StackPanel>
-
-            </ScrollViewer>
-
-        </DockPanel>
-
-        
+                <StackPanel x:Name="TeamGantt" Grid.Column="1">
+                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70"/>
+                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Red"/>
+                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Yellow"/>
+                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Purple"/>
+                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Blue"/>
+                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Moccasin"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Window>

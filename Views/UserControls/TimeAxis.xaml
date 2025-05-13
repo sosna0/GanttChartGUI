@@ -4,52 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Project.Views.UserControls"
-             xmlns:src="clr-namespace:Project.Models" d:DataContext="{d:DesignInstance Type=src:TimeDataCollection}"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="1920">
-
-    <UserControl.Resources>
-        <src:TimeDataCollection x:Key="dataList"/>
-    </UserControl.Resources>
-
-    <Grid>
-        <ItemsControl ItemsSource="{Binding Source={StaticResource dataList}}">
-
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding StringFormat='{}{0:HH\\:mm}'}" 
-                                    Margin="15,10,15,0" 
-                                    VerticalAlignment="Center"/>
-                        <Canvas Height="10" Width="60" HorizontalAlignment="Center" >
-                            <Rectangle Height="2" Width="60" Fill="Black" Canvas.Top="4"/>
-                            <Rectangle Height="10" Width="2" Fill="Black" Canvas.Left="29"/>
-
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="0" Canvas.Top="1" VerticalAlignment="Center"/>
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="5" Canvas.Top="1" VerticalAlignment="Center"/>
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="10" Canvas.Top="1" VerticalAlignment="Center"/>
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="15" Canvas.Top="1" VerticalAlignment="Center"/>
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="20" Canvas.Top="1" VerticalAlignment="Center"/>
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="25" Canvas.Top="1" VerticalAlignment="Center"/>
-
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="35" Canvas.Top="1" VerticalAlignment="Center"/>
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="40" Canvas.Top="1" VerticalAlignment="Center"/>
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="45" Canvas.Top="1" VerticalAlignment="Center"/>
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="50" Canvas.Top="1" VerticalAlignment="Center"/>
-                            <Rectangle Height="8" Width="1" Fill="Black" Canvas.Left="55" Canvas.Top="1" VerticalAlignment="Center"/>
-
-                        </Canvas>
-
-
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </Grid>
+             d:DesignHeight="60" d:DesignWidth="800">
+    <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="CanvasAxis" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}" Height="Auto"/>
 </UserControl>
