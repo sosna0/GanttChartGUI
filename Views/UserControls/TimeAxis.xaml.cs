@@ -37,19 +37,52 @@ namespace Project.Views.UserControls
             Redraw();
         }
 
+        public static readonly DependencyProperty StartHourProperty =
+            DependencyProperty.Register(
+            nameof(StartHour),
+            typeof(int),
+            typeof(TimeAxis),
+            new PropertyMetadata(0, OnTimeRangeChanged));
+
+        public static readonly DependencyProperty EndHourProperty =
+            DependencyProperty.Register(
+                nameof(EndHour),
+                typeof(int),
+                typeof(TimeAxis),
+                new PropertyMetadata(24, OnTimeRangeChanged));
+
+        public int StartHour
+        {
+            get => (int)GetValue(StartHourProperty);
+            set => SetValue(StartHourProperty, value);
+        }
+
+        public int EndHour
+        {
+            get => (int)GetValue(EndHourProperty);
+            set => SetValue(EndHourProperty, value);
+        }
+
+        private static void OnTimeRangeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TimeAxis axis && axis.IsLoaded)
+            {
+                axis.Redraw();
+            }
+        }
+
         private void Redraw()
         {
             CanvasAxis.Children.Clear();
 
             double canvasWidth = CanvasAxis.ActualWidth;
             double canvasHeight = CanvasAxis.ActualHeight;
-            // 25aby miec godzine odstępu od początku i końca
-            double totalMinutes = 26 * 60;
 
-            for (int hour = 0; hour <= 24; hour++)
+            double totalMinutes = (EndHour - StartHour) * 60;
+
+            for (int hour = StartHour; hour <= EndHour; hour++)
             {
-                // przesunięte o 60 minut
-                double x = ((60 + hour*60) / totalMinutes) * canvasWidth;
+                double x = ((hour - StartHour)*60 / totalMinutes) * canvasWidth;
  
                 // Linia pionowa (główna godzina)
                 Line hourMark = new Line
@@ -75,7 +108,7 @@ namespace Project.Views.UserControls
                 CanvasAxis.Children.Add(label);
 
                 // Mniejsze podziałki co 10 min
-                if (hour < 24)
+                if (hour < 24 && hour < EndHour)
                 {
                     for (int i = 1; i < 6; i++) // 10, 20, ..., 50
                     {

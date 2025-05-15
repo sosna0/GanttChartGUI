@@ -7,6 +7,14 @@
         xmlns:UserControls="clr-namespace:Project.Views.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="1200">
+    <Window.Resources>
+        <Style TargetType="{x:Type UserControls:TimeGrid}">
+            <Setter Property="Margin" Value="20,0"/>
+        </Style>
+        <Style TargetType="{x:Type UserControls:TimeAxis}">
+            <Setter Property="Margin" Value="20,0"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -54,21 +62,8 @@
                     <ColumnDefinition x:Name="ContentColumn" Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel x:Name="TeamLabels" Grid.Column="0" Orientation="Vertical">
-                    <!-- Etykiety Teamów -->
-                    <UserControls:TeamLabel TeamName="Team1" Height="70" Width="120"/>
-                    <UserControls:TeamLabel TeamName="Team2" Height="70" Width="120"/>
-                    <UserControls:TeamLabel TeamName="Team3" Height="70" Width="120"/>
-                    <UserControls:TeamLabel TeamName="Team4" Height="70" Width="120"/>
-                    <UserControls:TeamLabel TeamName="Team5" Height="70" Width="120"/>
-                    <UserControls:TeamLabel TeamName="Team6" Height="70" Width="120"/>
                 </StackPanel>
                 <StackPanel x:Name="TeamGantt" Grid.Column="1">
-                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70"/>
-                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Red"/>
-                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Yellow"/>
-                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Purple"/>
-                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Blue"/>
-                    <UserControls:TimeGrid Width="{Binding ActualWidth, ElementName=TimeAxis}" Height="70" TeamColor="Moccasin"/>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

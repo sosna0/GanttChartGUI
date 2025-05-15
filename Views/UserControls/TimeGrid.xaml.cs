@@ -36,32 +36,41 @@ namespace Project.Views.UserControls
             set => SetValue(TeamColorProperty, value);
         }
 
-        public TimeGrid()
+        public static readonly DependencyProperty StartHourProperty =
+            DependencyProperty.Register(
+            nameof(StartHour),
+            typeof(int),
+            typeof(TimeGrid),
+            new PropertyMetadata(0));
+
+        public static readonly DependencyProperty EndHourProperty =
+            DependencyProperty.Register(
+                nameof(EndHour),
+                typeof(int),
+                typeof(TimeGrid),
+                new PropertyMetadata(24));
+
+        public int StartHour
         {
-            InitializeComponent();
-            Activities = new() {
-                {
-                    "gaszenie pożaru", new Tuple<TimeOnly, int>(new TimeOnly(9, 0), 60)
-                },
-                {
-                    "pierwsza pomoc", new Tuple<TimeOnly, int>(new TimeOnly(10, 30), 30)
-                },
-                {
-                    "zabezpieczanie terenu", new Tuple<TimeOnly, int>(new TimeOnly(11, 35), 30)
-                },
-                {
-                    "wyważanie drzwi", new Tuple<TimeOnly, int>(new TimeOnly(12, 45), 10)
-                },
-                {
-                    "wyniesienie poszkodowanych z pożaru", new Tuple<TimeOnly, int>(new TimeOnly(15, 35), 60)
-                }
-            };
+            get => (int)GetValue(StartHourProperty);
+            set => SetValue(StartHourProperty, value);
         }
 
-        // Przesunięte o 60 minut do przodu
+        public int EndHour
+        {
+            get => (int)GetValue(EndHourProperty);
+            set => SetValue(EndHourProperty, value);
+        }
+
+        public TimeGrid(Dictionary<string, Tuple<TimeOnly, int>> activities)
+        {
+            InitializeComponent();
+            Activities = activities;
+        }
+
         private int GetTotalMinutes(TimeOnly time)
         {
-            return 60 + time.Minute + (time.Hour * 60);
+            return (time.Minute + (time.Hour * 60)) - (StartHour * 60);
         }
 
         private void Draw()
@@ -69,7 +78,7 @@ namespace Project.Views.UserControls
             double canvasHeight = CanvasContent.ActualHeight;
             double canvasWidth = CanvasContent.ActualWidth;
 
-            double minutesInDay = 26 * 60;
+            double totalMinutes = (EndHour - StartHour) * 60;
 
             // Chce naprzemian rysować etykietę na górze prostokąta i na dole (inaczej będa na siebie nachodzić)
             bool drawLabelTop = true;
@@ -78,28 +87,29 @@ namespace Project.Views.UserControls
             {
                 int startMinutes = GetTotalMinutes(activity.Value.Item1);
 
-                double xPosition = (startMinutes / minutesInDay) * canvasWidth;
+                double xPosition = (startMinutes / totalMinutes) * canvasWidth;
 
-                double rectWidth = (activity.Value.Item2 / minutesInDay) * canvasWidth;
+                double rectWidth = (activity.Value.Item2 / totalMinutes) * canvasWidth;
 
                 // Prostokąt aktywności
-                Rectangle rect = new Rectangle
+                Border border = new Border
                 {
                     Width = rectWidth,
                     Height = canvasHeight * 0.4,
-                    Fill = TeamColor,
-                    VerticalAlignment = VerticalAlignment.Center
+                    Background = TeamColor,
+                    BorderBrush = Brushes.Black,      // kolor obramowania
+                    BorderThickness = new Thickness(2) // grubość obramowania
                 };
 
-                Canvas.SetLeft(rect, xPosition);
-                Canvas.SetTop(rect, (canvasHeight - rect.Height)/ 2);  // Centruj prostokąt na Y
+                Canvas.SetLeft(border, xPosition);
+                Canvas.SetTop(border, (canvasHeight - border.Height)/ 2);  // Centruj prostokąt na Y
 
                 // Etykieta aktywności
                 TextBlock label = new TextBlock
                 {
                     Text = activity.Key,
                     Foreground = new SolidColorBrush(Colors.Black),
-                    FontSize = 12
+                    FontSize = 11
                 };
 
                 // Pomiar aby dostać szerokośc etykiey
@@ -111,7 +121,7 @@ namespace Project.Views.UserControls
                 drawLabelTop = !drawLabelTop;
 
                 // Dodajemy prostokąt i etykiętę do Canvas
-                CanvasContent.Children.Add(rect);
+                CanvasContent.Children.Add(border);
                 CanvasContent.Children.Add(label);
             }
         }
