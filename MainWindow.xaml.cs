@@ -32,16 +32,21 @@ namespace Project {
 
             ["Policja"] = new Dictionary<string, Tuple<TimeOnly, int>>
             {
-                ["Patrol w centrum miasta"] = new Tuple<TimeOnly, int>(new TimeOnly(9, 0), 120),
+                ["Kontrola drogowa"] = new Tuple<TimeOnly, int>(new TimeOnly(7, 0), 60*2),
+                ["Patrol w centrum miasta"] = new Tuple<TimeOnly, int>(new TimeOnly(9, 0), 60*2),
                 ["Zabezpieczenie miejsca wypadku"] = new Tuple<TimeOnly, int>(new TimeOnly(12, 30), 75),
-                ["Kontrola drogowa"] = new Tuple<TimeOnly, int>(new TimeOnly(15, 0), 60)
+                ["Kontrola drogowa1"] = new Tuple<TimeOnly, int>(new TimeOnly(15, 0), 60),
+                ["Kontrola drogowa2"] = new Tuple<TimeOnly, int>(new TimeOnly(17, 0), 60),
+                ["Kontrola drogowa3"] = new Tuple<TimeOnly, int>(new TimeOnly(18, 0), 60)
             },
 
             ["Zespół Ratownictwa Medycznego"] = new Dictionary<string, Tuple<TimeOnly, int>>
             {
                 ["Transport pacjenta"] = new Tuple<TimeOnly, int>(new TimeOnly(7, 45), 60),
                 ["Udzielenie pomocy po wypadku"] = new Tuple<TimeOnly, int>(new TimeOnly(10, 30), 90),
-                ["Szkolenie z resuscytacji"] = new Tuple<TimeOnly, int>(new TimeOnly(14, 0), 45)
+                ["Szkolenie z resuscytacji"] = new Tuple<TimeOnly, int>(new TimeOnly(14, 0), 45),
+                ["Udzielenie pomocy po wypadku1"] = new Tuple<TimeOnly, int>(new TimeOnly(16, 0), 30),
+                ["Udzielenie pomocy po wypadku2"] = new Tuple<TimeOnly, int>(new TimeOnly(17, 0), 30)
             },
 
             ["Grupa WOPR"] = new Dictionary<string, Tuple<TimeOnly, int>>
@@ -100,6 +105,15 @@ namespace Project {
                 timeGrid.StartHour = HourStart;
                 timeGrid.EndHour = HourEnd;
                 timeGrid.TeamColor = new SolidColorBrush(Color.FromRgb((byte)(new Random().Next(256)), (byte)(new Random().Next(256)), (byte)(new Random().Next(256))));
+
+                // Szerokośc skali = szerokośc wykresu
+                var binding = new Binding("ActualWidth")
+                {
+                    Source = TimeAxis,   // kontrolka, do której chcemy się powiązać
+                    Mode = BindingMode.OneWay
+                };
+
+                timeGrid.SetBinding(WidthProperty, binding);
                 TeamGantt.Children.Add(timeGrid);   
             }
         }

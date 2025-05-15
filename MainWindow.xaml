@@ -51,10 +51,11 @@
         <ScrollViewer x:Name="TeamDataScrollViewer" 
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto"
-            CanContentScroll="True"
+            CanContentScroll="False"
             Height="Auto"
             Grid.Column="0"
             Grid.Row="2"
+            Background="Transparent"
             >
             <Grid>
                 <Grid.ColumnDefinitions>
