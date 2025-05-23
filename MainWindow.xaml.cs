@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using Project.Models;
 using Project.Views.UserControls;
 
 namespace Project {
@@ -20,64 +21,14 @@ namespace Project {
     /// </summary>
     public partial class MainWindow : Window {
 
-        private Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>> Teams = new()
-        {
-            ["Straż Pożarna"] = new Dictionary<string, Tuple<TimeOnly, int>>
-            {
-                ["Gaszenie pożaru magazynu"] = new Tuple<TimeOnly, int>(new TimeOnly(8, 30), 90),
-                ["Kontrola hydrantów"] = new Tuple<TimeOnly, int>(new TimeOnly(11, 0), 45),
-                ["Ćwiczenia z użyciem drabin"] = new Tuple<TimeOnly, int>(new TimeOnly(13, 15), 60),
-                ["Obsługa festynu rodzinnego"] = new Tuple<TimeOnly, int>(new TimeOnly(18, 00), 60*4),
-            },
-
-            ["Policja"] = new Dictionary<string, Tuple<TimeOnly, int>>
-            {
-                ["Kontrola drogowa"] = new Tuple<TimeOnly, int>(new TimeOnly(7, 0), 60*2),
-                ["Patrol w centrum miasta"] = new Tuple<TimeOnly, int>(new TimeOnly(9, 0), 60*2),
-                ["Zabezpieczenie miejsca wypadku"] = new Tuple<TimeOnly, int>(new TimeOnly(12, 30), 75),
-                ["Kontrola drogowa1"] = new Tuple<TimeOnly, int>(new TimeOnly(15, 0), 60),
-                ["Kontrola drogowa2"] = new Tuple<TimeOnly, int>(new TimeOnly(17, 0), 60),
-                ["Kontrola drogowa3"] = new Tuple<TimeOnly, int>(new TimeOnly(18, 0), 60)
-            },
-
-            ["Zespół Ratownictwa Medycznego"] = new Dictionary<string, Tuple<TimeOnly, int>>
-            {
-                ["Transport pacjenta"] = new Tuple<TimeOnly, int>(new TimeOnly(7, 45), 60),
-                ["Udzielenie pomocy po wypadku"] = new Tuple<TimeOnly, int>(new TimeOnly(10, 30), 90),
-                ["Szkolenie z resuscytacji"] = new Tuple<TimeOnly, int>(new TimeOnly(14, 0), 45),
-                ["Udzielenie pomocy po wypadku1"] = new Tuple<TimeOnly, int>(new TimeOnly(16, 0), 30),
-                ["Udzielenie pomocy po wypadku2"] = new Tuple<TimeOnly, int>(new TimeOnly(17, 0), 30)
-            },
-
-            ["Grupa WOPR"] = new Dictionary<string, Tuple<TimeOnly, int>>
-            {
-                ["Patrolowanie kąpieliska"] = new Tuple<TimeOnly, int>(new TimeOnly(9, 15), 120),
-                ["Reakcja na wezwanie o topiącym się"] = new Tuple<TimeOnly, int>(new TimeOnly(13, 0), 30),
-                ["Szkolenie z użyciem łodzi"] = new Tuple<TimeOnly, int>(new TimeOnly(15, 30), 60)
-            },
-
-            ["GOPR"] = new Dictionary<string, Tuple<TimeOnly, int>>
-            {
-                ["Akcja ratunkowa w górach"] = new Tuple<TimeOnly, int>(new TimeOnly(8, 0), 180),
-                ["Szkolenie z użyciem helikoptera"] = new Tuple<TimeOnly, int>(new TimeOnly(12, 15), 90),
-                ["Oznaczanie niebezpiecznych tras"] = new Tuple<TimeOnly, int>(new TimeOnly(15, 0), 60)
-            },
-
-            ["TOPR"] = new Dictionary<string, Tuple<TimeOnly, int>>
-            {
-                ["Akcja ratunkowa w górach"] = new Tuple<TimeOnly, int>(new TimeOnly(6, 0), 250),
-                ["Szkolenie z użyciem helikoptera"] = new Tuple<TimeOnly, int>(new TimeOnly(10, 30), 90),
-                ["Oznaczanie niebezpiecznych tras"] = new Tuple<TimeOnly, int>(new TimeOnly(12, 0), 60),
-                ["Patrolowanie szlaków turystycznych"] = new Tuple<TimeOnly, int>(new TimeOnly(14, 0), 120)
-            }
-        };
+        private Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>> Teams;
 
         private const int LABEL_WIDTH = 120;
         private const int ROW_HEIGHT = 70;
 
         public MainWindow() {
+            Teams = new();
             InitializeComponent();
-            DrawTimeGrids();
         }
 
         private void SethoursTimeAxis(int startHour, int endHour)
@@ -166,11 +117,22 @@ namespace Project {
                 // Czyszczenie starego wykresu
                 Reset();
                 string zawartosc = File.ReadAllText(openFileDialog.FileName);
-                // Tutaj parsowanie i sprawdzenie błędów
-                Errors.Text = zawartosc;
 
-                // Jak git to
-                // DrawTimeGrids()
+                try
+                {
+                    this.Teams = InputParser.Parse(zawartosc);
+
+                    // Tutaj jeszcze można zrobić walidacje
+
+                    // Rzucić wyjątek jak czasy się na siebie nakładają
+
+                    DrawTimeGrids();
+                }
+                catch (Exception ex)
+                {
+                    Errors.Text = ex.Message;
+                }
+                   
             }
 
         }

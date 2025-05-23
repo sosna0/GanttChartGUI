@@ -1,0 +1,7 @@
+﻿Straż Pożarna|Gaszenie pożaru magazynu|08:30|90|Kontrola hydrantów|11:00|45|Ćwiczenia z użyciem drabin|13:15|60|Obsługa festynu rodzinnego|18:00|240
+Straż Pożarna1
+Policja|Kontrola drogowa|07:00|120|Patrol w centrum miasta|09:00|120|Zabezpieczenie miejsca wypadku|12:30|75|Kontrola drogowa1|15:00|60|Kontrola drogowa2|17:00|60|Kontrola drogowa3|18:00|60
+Zespół Ratownictwa Medycznego|Transport pacjenta|07:45|60|Udzielenie pomocy po wypadku|10:30|90|Szkolenie z resuscytacji|14:00|45|Udzielenie pomocy po wypadku1|16:00|30|Udzielenie pomocy po wypadku2|17:00|30
+Grupa WOPR|Patrolowanie kąpieliska|09:15|120|Reakcja na wezwanie o topiącym się|13:00|30|Szkolenie z użyciem łodzi|15:30|60
+GOPR|Akcja ratunkowa w górach|08:00|180|Szkolenie z użyciem helikoptera|12:15|90|Oznaczanie niebezpiecznych tras|15:00|60
+TOPR|Akcja ratunkowa w górach|06:00|250|Szkolenie z użyciem helikoptera|10:30|90|Oznaczanie niebezpiecznych tras|12:00|60|Patrolowanie szlaków turystycznych|14:00|120

@@ -4,51 +4,85 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using Project.Exceptions;
 
 namespace Project.Models {
     internal static class InputParser {
 
+        public static Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>> Parse(string input, char part_sep='|')
+        {
+            var schedule = new Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>>();
 
-        // to domyślnie będzie wczytywane na wejściu
-        public static List<string> input = [
-            "pogotownie, pierwsza pomoc, 10:30",
-            "policja, zabezpieczanie terenu, 10:35",
-            "strażacy1, gaszenie pożaru, 10:00",
-            "strażacy1, wyważanie drzwi, 10:25",
-            "strażacy1, wyniesienie poszkodowanych z pożaru, 10:35"
-        ];
+            string[] lines = input.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
-        public static List<Team> teams = [];
-        public static Dictionary<string, Dictionary<string, TimeOnly>> TeamWithActivity = [];
+            int lineNumber = 0;
 
-        // dopisać funkcję wczytującą dane z pliku do listy
-        public static void Parse(List<string> input) {
-            foreach (var item in input) {
-                var tasks = item.Split(", ");
-                string team_name = tasks[0];
-                string activity_name = tasks[1];
-                var start_time = TimeOnly.Parse(tasks[2]);
-
-                if (TeamWithActivity.ContainsKey(team_name)) {
-                    //Console.WriteLine("contains");
-                    TeamWithActivity[team_name][activity_name] = start_time;
+            foreach (string line in lines)
+            {
+                lineNumber++;
+                string[] parts = line.Split(part_sep);
+                if (parts.Length < 1)
+                {
+                    throw new ParsingException($"Pusta linia lub linia bez nazwy zespołu w linii {lineNumber}.");
                 }
-                else {
-                    //Console.WriteLine("doesn't contain");
-                    TeamWithActivity[team_name] = new Dictionary<string, TimeOnly>();
-                    TeamWithActivity[team_name][activity_name] = start_time;
+
+                string teamName = parts[0];
+                var activities = new Dictionary<string, Tuple<TimeOnly, int>>();
+                
+                // Pierwsza część to zawsze nazwa, więcj tutaj brakuje aktywności
+                if (parts.Length < 2)
+                {
+                    throw new NoActivitiesException(teamName);
                 }
-            }
 
-            foreach (var item in TeamWithActivity) {
-                var team = new Team(item.Key, item.Value);
-                teams.Add(team);
-                team.ShowSchedule();
-            }
+                // Sprawdzamy duplikaty nazwy zespołu
+                if (schedule.ContainsKey(teamName))
+                {
+                    throw new DuplicateTeamNameException(teamName);
+                }
 
+                for (int i = 1; i < parts.Length; i += 3)
+                {
+                    if (i + 2 >= parts.Length)
+                    {
+                        throw new InvalidActivityDataException($"Niekompletne dane aktywności w linii {lineNumber} dla zespołu '{teamName}'. Oczekiwano 3 elementów (nazwa, początek, trwanie), znaleziono mniej.");
+                    }
+
+                    string activityName = parts[i];
+                    TimeOnly startTime;
+                    int durationInMinutes;
+
+                    // Sprawdzamy duplikaty aktywności
+                    if (activities.ContainsKey(activityName))
+                    {
+                        throw new DuplicateActivityException(teamName, activityName);
+                    }
+
+                    // Parsowaniu czasu rozpoczęcia
+                    try
+                    {
+                        startTime = TimeOnly.Parse(parts[i + 1]);
+                    }
+                    catch (Exception)
+                    {
+                        throw new InvalidActivityDataException($"Błąd parsowania czasu rozpoczęcia dla aktywności '{activityName}' w zespole '{teamName}' w linii {lineNumber}. Wartość: '{parts[i + 1]}'.");
+                    }
+
+                    // Parsowaniu czasu trwania
+                    try
+                    {
+                        durationInMinutes = int.Parse(parts[i + 2]);
+                    }
+                    catch (Exception)
+                    {
+                        throw new InvalidActivityDataException($"Błąd parsowania czasu trwania dla aktywności '{activityName}' w zespole '{teamName}' w linii {lineNumber}. Wartość: '{parts[i + 2]}'.");
+                    }
+                    activities.Add(activityName, new Tuple<TimeOnly, int>(startTime, durationInMinutes));
+                }
+                schedule.Add(teamName, activities);
+            }
+            return schedule;
 
         }
-
-
     }
 }
