@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
-using Project.Exceptions;
+using Parser.Exceptions;
 
-namespace Project.Models {
-    internal static class InputParser {
+namespace Parser.Models {
+    public static class InputParser {
 
         public static Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>> Parse(string input, char part_sep='|')
         {

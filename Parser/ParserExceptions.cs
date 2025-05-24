@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.Exceptions
+namespace Parser.Exceptions
 {
     public class ParsingException : Exception
     {
