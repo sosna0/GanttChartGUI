@@ -5,12 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Parser.Exceptions;
 
-namespace Parser.Models {
+namespace Parser.Models
+{
+
+    public record TimeSlot(TimeOnly Start, int Duration);
+    public class ScheduleMap : Dictionary<string, TimeSlot> { }
+    public class TeamsMap : Dictionary<string, ScheduleMap> { }
+
     public static class InputParser {
 
-        public static Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>> Parse(string input, char part_sep='|')
+        
+        public static TeamsMap Parse(string input, char part_sep='|')
         {
-            var schedule = new Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>>();
+            var schedule = new TeamsMap();
 
             string[] lines = input.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
@@ -26,7 +33,7 @@ namespace Parser.Models {
                 }
 
                 string teamName = parts[0];
-                var activities = new Dictionary<string, Tuple<TimeOnly, int>>();
+                var activities = new ScheduleMap();
                 
                 // Pierwsza część to zawsze nazwa, więcj tutaj brakuje aktywności
                 if (parts.Length < 2)
@@ -76,7 +83,7 @@ namespace Parser.Models {
                     {
                         throw new InvalidActivityDataException($"Błąd parsowania czasu trwania dla aktywności '{activityName}' w zespole '{teamName}' w linii {lineNumber}. Wartość: '{parts[i + 2]}'.");
                     }
-                    activities.Add(activityName, new Tuple<TimeOnly, int>(startTime, durationInMinutes));
+                    activities.Add(activityName, new TimeSlot(startTime, durationInMinutes));
                 }
                 schedule.Add(teamName, activities);
             }

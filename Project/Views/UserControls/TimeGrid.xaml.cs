@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Parser.Models;
 
 namespace Project.Views.UserControls
 {
@@ -21,7 +22,7 @@ namespace Project.Views.UserControls
     public partial class TimeGrid : UserControl
     {
         // aktywnośc -> (czas, ile_trwało)
-        private Dictionary<string, Tuple<TimeOnly, int>> Activities;
+        private ScheduleMap Activities;
 
         public static readonly DependencyProperty TeamColorProperty =
             DependencyProperty.Register(
@@ -62,7 +63,7 @@ namespace Project.Views.UserControls
             set => SetValue(EndHourProperty, value);
         }
 
-        public TimeGrid(Dictionary<string, Tuple<TimeOnly, int>> activities)
+        public TimeGrid(ScheduleMap activities)
         {
             InitializeComponent();
             Activities = activities;
@@ -85,11 +86,11 @@ namespace Project.Views.UserControls
 
             foreach (var activity in Activities)
             {
-                int startMinutes = GetTotalMinutes(activity.Value.Item1);
+                int startMinutes = GetTotalMinutes(activity.Value.Start);
 
                 double xPosition = (startMinutes / totalMinutes) * canvasWidth;
 
-                double rectWidth = (activity.Value.Item2 / totalMinutes) * canvasWidth;
+                double rectWidth = (activity.Value.Duration / totalMinutes) * canvasWidth;
 
                 // Prostokąt aktywności
                 Border border = new Border

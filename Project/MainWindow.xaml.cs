@@ -22,7 +22,7 @@ namespace Project {
     /// </summary>
     public partial class MainWindow : Window {
 
-        private Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>> Teams;
+        private TeamsMap Teams;
 
         private const int LABEL_WIDTH = 120;
         private const int ROW_HEIGHT = 70;
@@ -100,8 +100,8 @@ namespace Project {
             {
                 foreach (var activity in team.Value)
                 {
-                    TimeOnly start = activity.Value.Item1;
-                    int durationMinutes = activity.Value.Item2;
+                    TimeOnly start = activity.Value.Start;
+                    int durationMinutes = activity.Value.Duration;
                     TimeOnly end = start.AddMinutes(durationMinutes);
 
                     if (earliestStart == null || start < earliestStart)
@@ -126,7 +126,7 @@ namespace Project {
             TeamLabels.Children.Clear();
             TeamGantt.Children.Clear();
             Teams.Clear();
-            Teams = new Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>>();
+            Teams = new TeamsMap();
             SethoursTimeAxis(0, 24);
             ClearErrors();
         }
