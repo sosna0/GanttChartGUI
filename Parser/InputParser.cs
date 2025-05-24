@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace Parser.Models
             {
                 lineNumber++;
                 string[] parts = line.Split(part_sep);
-                if (parts.Length < 1)
+                if (string.IsNullOrWhiteSpace(parts[0]))
                 {
                     throw new ParsingException($"Pusta linia lub linia bez nazwy zespołu w linii {lineNumber}.");
                 }
