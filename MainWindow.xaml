@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project"
         xmlns:UserControls="clr-namespace:Project.Views.UserControls"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1200">
+        mc:Ignorable="d" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        Title="MainWindow" Height="700" Width="1200">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+    
     <Window.Resources>
         <Style TargetType="{x:Type UserControls:TimeGrid}">
             <Setter Property="Margin" Value="20,0"/>
@@ -15,27 +19,46 @@
             <Setter Property="Margin" Value="20,0"/>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <!-- Customowy Pasek Narzędzi-->
+            <RowDefinition Height="30"/>
             <!-- Przycisk i błędy -->
             <RowDefinition Height="60"/>
             <!-- Oś -->
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
             <!-- Zawartość -->
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
         <Grid Grid.Row="0">
-            <!-- Przycisk i błędy -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1.4,1.4,1.4,1.4" Width="120" Height="60" Cursor="Hand">
-                <Button x:Name="FileLoad" Content="Wczytaj z pliku" Click="FileLoad_Click" VerticalAlignment="Stretch" Background="Transparent" BorderThickness="0"/>
-            </Border>
-            <TextBlock Grid.Column="1" x:Name="Errors" TextWrapping="Wrap" Text="Potencjalne błędy pojawią się tutaj" FontSize="12" Height="60" TextAlignment="Center" Foreground="#FFFF3131"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Border BorderBrush="Black" BorderThickness="1.4,1.4,1.4,1.4">
+                    <UserControls:Logo Width="24" Height="24" Margin="2.5" Background="Transparent"/>
+                </Border>
+                
+                <Button x:Name="FileLoad" Content="Wczytaj z pliku" Click="FileLoad_Click" Width="100"
+                        BorderBrush="Transparent" Background="Transparent"/>
+            </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnMinimize" Content="&#xE921;" FontFamily="Segoe MDL2 Assets" Width="45" Height="30"
+                    BorderBrush="Transparent" Background="Transparent" Click="btnMinimize_Click"/>
+                <Button x:Name="btnMaximize" Content="&#xE922;" FontFamily="Segoe MDL2 Assets" Width="45" Height="30"
+                    BorderBrush="Transparent" Background="Transparent" Click="btnMaximize_Click"/>
+                <Button x:Name="btnClose" Content="&#xE8BB;" FontFamily="Segoe MDL2 Assets" Width="45" Height="30"
+                    BorderBrush="Transparent" Background="Transparent" Click="btnClose_Click"/>
+            </StackPanel>
         </Grid>
+        
         <Grid Grid.Row="1">
+            <!-- Błędy -->
+            <Border BorderBrush="Black" BorderThickness="1.4,1.4,1.4,1.4">
+                <TextBlock x:Name="Errors" TextWrapping="Wrap" Text="Potencjalne błędy pojawią się tutaj" FontSize="12" Height="60" TextAlignment="Center" Foreground="#FFFF3131"/>
+            </Border>
+            
+        </Grid>
+        <Grid Grid.Row="2">
             <!-- Oś -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
@@ -51,7 +74,7 @@
             CanContentScroll="False"
             Height="Auto"
             Grid.Column="0"
-            Grid.Row="2"
+            Grid.Row="3"
             Background="Transparent"
             >
             <Grid>

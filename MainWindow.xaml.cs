@@ -29,6 +29,18 @@ namespace Project {
         public MainWindow() {
             Teams = new();
             InitializeComponent();
+            this.StateChanged += Window_StateChanged;
+            DrawLogo();
+        }
+
+        //Opcjonalnie możemy wyświetlać na początku logo
+        private void DrawLogo() 
+        {
+            Logo logo = new Logo();
+            logo.Width = 500;
+            logo.Height = 500;
+            logo.HorizontalAlignment = HorizontalAlignment.Center;
+            TeamGantt.Children.Add(logo);
         }
 
         private void SethoursTimeAxis(int startHour, int endHour)
@@ -135,6 +147,40 @@ namespace Project {
                    
             }
 
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            DragMove();
+        }
+
+        private void btnMinimize_Click(object sender, RoutedEventArgs e) {
+            WindowState = WindowState.Minimized;
+        }
+
+        //Tu zakładam że domyślnie nie mamy fullscreen'u
+        private void btnMaximize_Click(object sender, RoutedEventArgs e) {
+            if(WindowState == WindowState.Maximized) {
+                WindowState = WindowState.Normal;
+                btnMaximize.Content = "\uE922";
+            }
+            else {
+                WindowState = WindowState.Maximized;
+                btnMaximize.Content = "\uE923";
+            }
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e) {
+            Close();
+            //Application.Current.Shutdown();
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e) {
+            if (this.WindowState == WindowState.Maximized) {
+                MainGrid.Margin = new Thickness(6); // żeby nie ucinało 
+            }
+            else {
+                MainGrid.Margin = new Thickness(0);
+            }
         }
     }
 }
