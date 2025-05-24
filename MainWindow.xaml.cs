@@ -162,14 +162,14 @@ namespace Project {
 
         // Funkcje do ustawienia kolorów dla wykresów
 
-        private static List<SolidColorBrush> GenerateColors(int count, double hueStart, double hueEnd) {
+        private static List<SolidColorBrush> GenerateColors(int count, double hueStart, double hueEnd, double saturation = 0.5) {
             var colors = new List<SolidColorBrush>();
             double hueRange = (hueEnd + 360 - hueStart) % 360;
             double step = hueRange / count;
 
             for (int i = 0; i < count; i++) {
                 double hue = (hueStart + step * i) % 360;
-                Color color = FromHSV(hue, 1.0, 1.0);
+                Color color = FromHSV(hue, saturation, 1.0);
                 colors.Add(new SolidColorBrush(color));
             }
 
