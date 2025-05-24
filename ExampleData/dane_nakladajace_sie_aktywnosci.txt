@@ -1,6 +1,6 @@
-Straż Pożarna|Szkolenie BHP|09:00|120|Przegląd sprzętu|14:00|60|Pokaz ratownictwa|17:00|90
+﻿Straż Pożarna|Szkolenie BHP|09:00|120|Przegląd sprzętu|14:00|60|Pokaz ratownictwa|17:00|90
 Policja|Służba nocna|22:00|360|Zabezpieczenie imprezy masowej|10:00|180|Eskorta transportu|15:00|90
-Zespół Ratownictwa Medycznego|Dyżur szpitalny|07:00|180|Wezwanie do zasłabnięcia|11:30|45|Warsztaty z pierwszej pomocy|15:00|120
+Zespół Ratownictwa Medycznego|Dyżur szpitalny|07:00|480|Wezwanie do zasłabnięcia|11:30|45|Warsztaty z pierwszej pomocy|15:00|120
 Grupa WOPR|Trening pływacki|07:30|90|Patrolowanie jeziora|10:00|240|Kontrola sprzętu wodnego|16:00|60
 GOPR|Transport poszkodowanego|09:30|150|Ćwiczenia lawinowe|13:00|120|Patrol szlaków górskich|16:00|90
 TOPR|Loty patrolowe|08:00|180|Szkolenie z nawigacji w trudnym terenie|11:00|90|Akcja poszukiwawcza|14:00|200

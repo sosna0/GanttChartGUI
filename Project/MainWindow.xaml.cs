@@ -149,11 +149,7 @@ namespace Project {
                 try
                 {
                     this.Teams = InputParser.Parse(zawartosc);
-
-                    // Tutaj jeszcze można zrobić walidacje
-
-                    // Rzucić wyjątek jak czasy się na siebie nakładają
-
+                    InputParser.Validate(this.Teams);
                     DrawTimeGrids();
                 }
                 catch (Exception ex)

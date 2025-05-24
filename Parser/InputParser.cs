@@ -91,5 +91,52 @@ namespace Parser.Models
             return schedule;
 
         }
+
+        public static void Validate(TeamsMap teams)
+        {
+            string teamName;
+            ScheduleMap schedule;
+            
+            foreach (KeyValuePair<string, ScheduleMap> teamEntry in teams)
+            {
+                teamName = teamEntry.Key;
+                schedule = teamEntry.Value;
+
+                if (schedule == null || schedule.Count == 0)
+                {
+                    throw new NoActivitiesException(teamName);
+                }
+
+                ValidateOverlappingActivities(teamName, schedule);
+            }
+        }
+
+        private static void ValidateOverlappingActivities(string teamName, ScheduleMap schedule)
+        {
+            var intervals = new List<(string Name, TimeOnly Start, TimeOnly End)>();
+            string activityName;
+            TimeSlot slot;
+            TimeOnly end;
+            foreach (KeyValuePair<string, TimeSlot> activityEntry in schedule)
+            {
+                activityName = activityEntry.Key;
+                slot = activityEntry.Value;
+                end = slot.Start.AddMinutes(slot.Duration);
+                intervals.Add((activityName, slot.Start, end));
+            }
+
+            intervals.Sort((a, b) => a.End.CompareTo(b.End));
+
+            for (int i = 1; i < intervals.Count; i++)
+            {
+                var previous = intervals[i - 1];
+                var current = intervals[i];
+
+                if (current.Start < previous.End)
+                {
+                    throw new OverlappingActivitiesException(teamName, previous.Name, current.Name);
+                }
+            }
+        }
     }
 }

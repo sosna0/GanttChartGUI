@@ -34,4 +34,10 @@ namespace Parser.Exceptions
         public NoActivitiesException(string teamName)
             : base($"Zespół '{teamName}' nie ma zdefiniowanych aktywności.") { }
     }
+
+    public class OverlappingActivitiesException : ParsingException
+    {
+        public OverlappingActivitiesException(string teamName, string activity1, string activity2)
+            : base($"W zespole '{teamName}' aktywności '{activity1}' i '{activity2}' nakładają się na siebie.") { }
+    }
 }
