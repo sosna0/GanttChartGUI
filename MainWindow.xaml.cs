@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -26,6 +27,8 @@ namespace Project {
         private const int LABEL_WIDTH = 120;
         private const int ROW_HEIGHT = 70;
 
+        private static readonly Random rand = new Random();
+
         public MainWindow() {
             Teams = new();
             InitializeComponent();
@@ -33,7 +36,7 @@ namespace Project {
             DrawLogo();
         }
 
-        //Opcjonalnie możemy wyświetlać na początku logo
+        //Opcjonalnie możemy wyświetlać na początku logo - zastanowić się, czy tak robimy
         private void DrawLogo() 
         {
             Logo logo = new Logo();
@@ -53,6 +56,12 @@ namespace Project {
         {
             var (HourStart, HourEnd) = GetStartEndHours();
             SethoursTimeAxis(HourStart, HourEnd);
+
+            var startingColorIndex = rand.Next(360);
+            //Debug.WriteLine(startingColorIndex);
+            var colors = GenerateColors(Teams.Count, startingColorIndex, startingColorIndex + 120);
+
+            int i = 0;
             foreach (var team in Teams)
             {
                 // Etykieta
@@ -67,7 +76,8 @@ namespace Project {
                 timeGrid.Height = ROW_HEIGHT;
                 timeGrid.StartHour = HourStart;
                 timeGrid.EndHour = HourEnd;
-                timeGrid.TeamColor = new SolidColorBrush(Color.FromRgb((byte)(new Random().Next(256)), (byte)(new Random().Next(256)), (byte)(new Random().Next(256))));
+                timeGrid.TeamColor = colors[i];
+                i++;
 
                 // Szerokośc skali = szerokośc wykresu
                 var binding = new Binding("ActualWidth")
@@ -148,6 +158,49 @@ namespace Project {
             }
 
         }
+
+
+        // Funkcje do ustawienia kolorów dla wykresów
+
+        private static List<SolidColorBrush> GenerateColors(int count, double hueStart, double hueEnd) {
+            var colors = new List<SolidColorBrush>();
+            double hueRange = (hueEnd + 360 - hueStart) % 360;
+            double step = hueRange / count;
+
+            for (int i = 0; i < count; i++) {
+                double hue = (hueStart + step * i) % 360;
+                Color color = FromHSV(hue, 1.0, 1.0);
+                colors.Add(new SolidColorBrush(color));
+            }
+
+            return colors;
+        }
+
+
+        private static Color FromHSV(double hue, double saturation, double value) {
+            int hue_index = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+            double f = hue / 60 - Math.Floor(hue / 60);
+
+            value = value * 255;
+            byte v = (byte)value;
+            byte p = (byte)(value * (1 - saturation));
+            byte q = (byte)(value * (1 - f * saturation));
+            byte t = (byte)(value * (1 - (1 - f) * saturation));
+
+            return hue_index switch {
+                0 => Color.FromRgb(v, t, p),
+                1 => Color.FromRgb(q, v, p),
+                2 => Color.FromRgb(p, v, t),
+                3 => Color.FromRgb(p, q, v),
+                4 => Color.FromRgb(t, p, v),
+                5 => Color.FromRgb(v, p, q),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+
+        //Funkcje do customowego paska narzędzi
+
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             DragMove();

@@ -98,7 +98,8 @@ namespace Project.Views.UserControls
                     Height = canvasHeight * 0.4,
                     Background = TeamColor,
                     BorderBrush = Brushes.Black,      // kolor obramowania
-                    BorderThickness = new Thickness(2) // grubość obramowania
+                    BorderThickness = new Thickness(2.5), // grubość obramowania
+                    CornerRadius = new CornerRadius(10)
                 };
 
                 Canvas.SetLeft(border, xPosition);
