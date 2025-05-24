@@ -128,6 +128,12 @@ namespace Project {
             Teams.Clear();
             Teams = new Dictionary<string, Dictionary<string, Tuple<TimeOnly, int>>>();
             SethoursTimeAxis(0, 24);
+            ClearErrors();
+        }
+
+        private void ClearErrors()
+        {
+            Errors.Text = "";
         }
 
         private void FileLoad_Click(object sender, RoutedEventArgs e)
