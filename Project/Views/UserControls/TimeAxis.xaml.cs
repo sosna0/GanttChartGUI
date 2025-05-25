@@ -51,6 +51,13 @@ namespace Project.Views.UserControls
                 typeof(TimeAxis),
                 new PropertyMetadata(24, OnTimeRangeChanged));
 
+        public static readonly DependencyProperty TeamsHeightProperty =
+            DependencyProperty.Register(
+                nameof(TeamsHeight),
+                typeof(int),
+                typeof(TimeAxis),
+                new PropertyMetadata(0, OnTimeRangeChanged));
+
         public int StartHour
         {
             get => (int)GetValue(StartHourProperty);
@@ -61,6 +68,12 @@ namespace Project.Views.UserControls
         {
             get => (int)GetValue(EndHourProperty);
             set => SetValue(EndHourProperty, value);
+        }
+
+        public int TeamsHeight 
+        {
+            get => (int)GetValue(TeamsHeightProperty);
+            set => SetValue(TeamsHeightProperty, value);
         }
 
         private static void OnTimeRangeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -95,6 +108,18 @@ namespace Project.Views.UserControls
                     StrokeThickness = 1
                 };
                 CanvasAxis.Children.Add(hourMark);
+
+                // Linia pionowa (przedłużenie linii godzinowych)
+                Line hourMarkExtension = new Line {
+                    X1 = x,
+                    Y1 = canvasHeight,
+                    X2 = x,
+                    Y2 = canvasHeight + TeamsHeight,
+                    Stroke = Brushes.LightGray,
+                    StrokeThickness = 1,
+                    StrokeDashArray = [12, 12]
+                };
+                CanvasAxis.Children.Add(hourMarkExtension);
 
                 // Etykieta czasu
                 TextBlock label = new TextBlock

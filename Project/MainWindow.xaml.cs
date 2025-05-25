@@ -46,16 +46,23 @@ namespace Project {
             TeamGantt.Children.Add(logo);
         }
 
-        private void SethoursTimeAxis(int startHour, int endHour)
+        private void SetHoursTimeAxis(int startHour, int endHour)
         {
             TimeAxis.StartHour = startHour;
             TimeAxis.EndHour = endHour;
         }
 
+        private void SetTeamsHeightTimeAxis(int teamsHeight) {
+            TimeAxis.TeamsHeight = teamsHeight;
+        }
+
         private void DrawTimeGrids()
         {
             var (HourStart, HourEnd) = GetStartEndHours();
-            SethoursTimeAxis(HourStart, HourEnd);
+            SetHoursTimeAxis(HourStart, HourEnd);
+
+            var TeamsHeight = (int)(Teams.Count * ROW_HEIGHT);
+            SetTeamsHeightTimeAxis(TeamsHeight);
 
             var startingColorIndex = rand.Next(360);
             //Debug.WriteLine(startingColorIndex);
@@ -127,7 +134,8 @@ namespace Project {
             TeamGantt.Children.Clear();
             Teams.Clear();
             Teams = new TeamsMap();
-            SethoursTimeAxis(0, 24);
+            SetHoursTimeAxis(0, 24);
+            SetTeamsHeightTimeAxis(0);
             ClearErrors();
         }
 

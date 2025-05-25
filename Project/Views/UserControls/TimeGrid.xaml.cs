@@ -111,6 +111,7 @@ namespace Project.Views.UserControls
                 {
                     Text = activity.Key,
                     Foreground = new SolidColorBrush(Colors.Black),
+                    Background = new SolidColorBrush(Colors.White),
                     FontSize = 11
                 };
 
