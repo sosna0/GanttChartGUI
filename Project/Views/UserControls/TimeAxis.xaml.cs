@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Project.Views.UserControls
 {
@@ -29,7 +30,9 @@ namespace Project.Views.UserControls
 
         private void TimeAxis_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Redraw();
+            Dispatcher.InvokeAsync(() => {
+                Redraw();
+            }, DispatcherPriority.Render);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
