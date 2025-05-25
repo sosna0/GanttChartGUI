@@ -32,6 +32,9 @@ namespace Project {
         public MainWindow() {
             Teams = new();
             InitializeComponent();
+            this.MinWidth = 720;
+            this.MinHeight = 420;
+
             this.StateChanged += Window_StateChanged;
             DrawLogo();
         }
