@@ -146,5 +146,57 @@ namespace Tests
             Assert.That(start, Is.EqualTo(activity.Start));
             Assert.That(duration,Is.EqualTo( activity.Duration));
         }
+
+        [Test]
+        public void ShouldThrowNoActivitiesException_WhenScheduleIsEmpty()
+        {
+            var teams = new TeamsMap
+            {
+                { "TeamA", new ScheduleMap() }
+            };
+
+            Assert.Throws<NoActivitiesException>(() => InputParser.Validate(teams));
+        }
+
+        [Test]
+        public void ShouldThrowOverlappingActivitiesException_WhenActivitiesOverlap()
+        {
+            var overlappingSchedule = new ScheduleMap
+            {
+                { "Activity1", new TimeSlot(new TimeOnly(9, 0), 60) },
+                { "Activity2", new TimeSlot(new TimeOnly(9, 30), 30) }
+            };
+
+            var teams = new TeamsMap
+            {
+                { "TeamB", overlappingSchedule }
+            };
+
+            Assert.Throws<OverlappingActivitiesException>(() => InputParser.Validate(teams));
+        }
+
+        [Test]
+        public void ShouldNotThrow_WhenActivitiesDoNotOverlap()
+        {
+            var nonOverlappingSchedule = new ScheduleMap
+            {
+                { "Activity1", new TimeSlot(new TimeOnly(9, 0), 60) },
+                { "Activity2", new TimeSlot(new TimeOnly(10, 0), 30) }
+            };
+
+            var teams = new TeamsMap
+            {
+                { "TeamC", nonOverlappingSchedule }
+            };
+
+            try
+            {
+                InputParser.Validate(teams);
+            }
+            catch (OverlappingActivitiesException)
+            {
+                Assert.Fail("OverlappingActivitiesException should not have been thrown.");
+            }
+        }
     }
 }
